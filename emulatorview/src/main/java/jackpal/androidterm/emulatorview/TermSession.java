@@ -389,7 +389,7 @@ public class TermSession {
         return mTranscriptScreen;
     }
 
-    TerminalEmulator getEmulator() {
+    public TerminalEmulator getEmulator() {
         return mEmulator;
     }
 
@@ -407,7 +407,7 @@ public class TermSession {
      * Notify the {@link UpdateCallback} registered by {@link
      * #setUpdateCallback setUpdateCallback} that the screen has changed.
      */
-    protected void notifyUpdate() {
+    public void notifyUpdate() {
         if (mNotify != null) {
             mNotify.onUpdate();
         }

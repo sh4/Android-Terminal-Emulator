@@ -98,35 +98,15 @@ public class TermExec {
      */
     public static native void sendSignal(int processId, int signal);
 
-    static int createSubprocess(ParcelFileDescriptor masterFd, String cmd, String[] args, String[] envVars) throws IOException
+    public static int createSubprocess(ParcelFileDescriptor masterFd, String cmd, String[] args, String[] envVars) throws IOException
     {
-        final int integerFd;
-
-        if (Build.VERSION.SDK_INT >= 12)
-            integerFd = FdHelperHoneycomb.getFd(masterFd);
-        else {
-            try {
-                if (descriptorField == null) {
-                    descriptorField = FileDescriptor.class.getDeclaredField("descriptor");
-                    descriptorField.setAccessible(true);
-                }
-
-                integerFd = descriptorField.getInt(masterFd.getFileDescriptor());
-            } catch (Exception e) {
-                throw new IOException("Unable to obtain file descriptor on this OS version: " + e.getMessage());
-            }
-        }
-
+        final int integerFd = masterFd.getFd();
         return createSubprocessInternal(cmd, args, envVars, integerFd);
     }
 
     private static native int createSubprocessInternal(String cmd, String[] args, String[] envVars, int masterFd);
-}
 
-// prevents runtime errors on old API versions with ruthless verifier
-@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-class FdHelperHoneycomb {
-    static int getFd(ParcelFileDescriptor descriptor) {
-        return descriptor.getFd();
-    }
+    public static native void setPtyWindowSizeInternal(int fd, int row, int col, int xpixel, int ypixel) throws IOException;
+
+    public static native void setPtyUTF8ModeInternal(int fd, boolean utf8Mode) throws IOException;
 }

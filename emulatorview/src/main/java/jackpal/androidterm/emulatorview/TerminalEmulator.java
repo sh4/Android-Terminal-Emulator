@@ -33,7 +33,7 @@ import android.util.Log;
  * terminal. Missing functionality: text attributes (bold, underline, reverse
  * video, color) alternate screen cursor key and keypad escape sequences.
  */
-class TerminalEmulator {
+public class TerminalEmulator {
     public void setKeyListener(TermKeyListener l) {
         mKeyListener = l;
     }
@@ -718,13 +718,13 @@ class TerminalEmulator {
             setCursorCol(nextTabStop(mCursorCol));
             break;
 
-        case 13:
+        case 13: // CR
             setCursorCol(0);
             break;
 
-        case 10: // CR
+        case 10: // LF
         case 11: // VT
-        case 12: // LF
+        case 12: // FF
             doLinefeed();
             break;
 
